@@ -8,3 +8,4 @@ class User(BaseModel):
     email: str
     full_name: str
     created_at: datetime
+    avatar_url:str | None = None
