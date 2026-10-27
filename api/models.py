@@ -1,6 +1,7 @@
 from datetime import datetime
+from decimal import Decimal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class User(BaseModel):
@@ -28,3 +29,19 @@ class Transaction(BaseModel):
     category: str
     amount: float  # float, not Decimal: Pydantic serialises Decimal as a JSON string
     occurred_at: datetime
+
+class BudgetCreate(BaseModel):
+    """What the client sends to create a budget."""
+
+    category: str
+    maximum_spend: Decimal = Field(gt=0, max_digits=12, decimal_places=2)
+    theme: str
+
+class Budget(BaseModel):
+    """A budget row as returned to the UI."""
+
+    budget_id: int
+    category: str
+    maximum_spend: float # float, not Decimal - same reason as Transaction.amount
+    theme: str
+    created_at: datetime 
