@@ -34,7 +34,7 @@ class BudgetCreate(BaseModel):
     """What the client sends to create a budget."""
 
     category: str
-    maximum_spend: Decimal = Field(gt=0, max_digits=12,      decimal_places=2)
+    maximum_spend: Decimal = Field(gt=0, max_digits=12, decimal_places=2)
     theme: str
 
 class Budget(BaseModel):
@@ -42,6 +42,6 @@ class Budget(BaseModel):
 
     budget_id: int
     category: str
-    maximum_spend: float # float, not Deccimal - same reason as Transaction.amount
+    maximum_spend: float # float, not Decimal - same reason as Transaction.amount
     theme: str
     created_at: datetime 

@@ -7,6 +7,25 @@ from api.models import Budget, BudgetCreate
 
 router = APIRouter(prefix="/budgets", tags=["budgets"])
 
+@router.get("/{user_id}", response_model=list[Budget])
+async def budgets_list(user_id: int
+):
+    """List of budgets per user."""
+    async with pool.connection() as conn:
+        async with conn.cursor(row_factory=dict_row) as cur:
+            await cur.execute(
+                """
+                  SELECT budget_id, category, maximum_spend, theme, created_at
+                  FROM public.budgets
+                  WHERE user_id = %s
+                  ORDER BY created_at
+            """,
+            (user_id,),
+            )
+            return await cur.fetchall() 
+
+
+
 
 @router.post("", response_model=Budget, status_code=201)
 async def create_budget(
