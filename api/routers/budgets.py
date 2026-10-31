@@ -52,3 +52,24 @@ async def create_budget(
                 raise HTTPException(422, f"'{body.category}' is not a valid category")
 
             return await cur.fetchone()
+
+
+@router.delete("/{budget_id}", status_code=204)
+async def delete_budget(
+    budget_id: int,
+    user_id: int = Query(..., description="Whose budget; becomes the JWT subject once auth lands"),
+):
+    """Delete one of the user's budgets."""
+    async with pool.connection() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(
+                """
+                DELETE FROM public.budgets
+                WHERE budget_id = %s AND user_id = %s
+                """,
+                (budget_id, user_id),
+            )
+            if cur.rowcount == 0:
+                raise HTTPException(404, "Budget not found")
+
+          
