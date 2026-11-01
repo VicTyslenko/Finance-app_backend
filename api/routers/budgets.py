@@ -72,4 +72,35 @@ async def delete_budget(
             if cur.rowcount == 0:
                 raise HTTPException(404, "Budget not found")
 
+
+@router.put("/{budget_id}", response_model=Budget)
+async def update_budget(
+    budget_id: int,
+    body: BudgetCreate,
+    user_id: int = Query(..., description="Whose budget; becomes the JWT subject once auth lands"),
+):
+    """Replace one of the user's budgets."""
+    async with pool.connection() as conn:
+        async with conn.cursor(row_factory=dict_row) as cur:
+            try:
+                await cur.execute(
+                    """
+                    UPDATE public.budgets
+                    SET category = %s, maximum_spend = %s, theme = %s
+                    WHERE budget_id = %s AND user_id = %s
+                    RETURNING budget_id, category, maximum_spend, theme, created_at
+                    """,
+                    (body.category, body.maximum_spend, body.theme, budget_id, user_id),
+                )
+            except errors.UniqueViolation:
+                raise HTTPException(409, f"A budget for {body.category} already exists")
+            except errors.CheckViolation:
+                raise HTTPException(422, f"'{body.category}' is not a valid category")
+
+            row = await cur.fetchone()
+            if row is None:
+                raise HTTPException(404, "Budget not found")
+            return row
+
+
           
