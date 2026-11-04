@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.database import pool
-from api.routers import counterparties, transactions, users, budgets
+from api.routers import counterparties, transactions, users, budgets, pots
 
 
 @asynccontextmanager
@@ -28,6 +28,7 @@ app.include_router(users.router)
 app.include_router(counterparties.router)
 app.include_router(transactions.router)
 app.include_router(budgets.router)
+app.include_router(pots.router)
 
 
 @app.get("/health")
