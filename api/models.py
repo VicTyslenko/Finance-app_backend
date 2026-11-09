@@ -10,6 +10,7 @@ class User(BaseModel):
     full_name: str
     created_at: datetime
     avatar_url:str | None = None
+    balance: float
 
 class Counterparty(BaseModel):
    counterparty_id:int
@@ -45,3 +46,25 @@ class Budget(BaseModel):
     maximum_spend: float # float, not Decimal - same reason as Transaction.amount
     theme: str
     created_at: datetime 
+
+class PotCreate(BaseModel):
+    """What the client sends to create or replace a pot."""
+
+    name: str = Field(min_length=1, max_length=30)
+    target: Decimal = Field(gt=0, max_digits=12, decimal_places=2)
+    theme: str
+
+class Pot(BaseModel):
+    """A pot row as returned to the UI."""
+
+    pot_id: int
+    name: str
+    target: float
+    total: float
+    theme: str
+    created_at: datetime
+
+class PotMove(BaseModel):
+    """Money moved between the balance and a pot."""
+
+    amount: Decimal = Field(gt=0, max_digits=12, decimal_places=2)
