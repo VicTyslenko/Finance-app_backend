@@ -10,6 +10,7 @@ class User(BaseModel):
     full_name: str
     created_at: datetime
     avatar_url:str | None = None
+    balance: float
 
 class Counterparty(BaseModel):
    counterparty_id:int

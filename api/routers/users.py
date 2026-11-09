@@ -13,7 +13,7 @@ async def list_users():
     async with pool.connection() as conn:
         async with conn.cursor(row_factory=dict_row) as cur:
             await cur.execute("""
-                SELECT user_id, email, full_name, created_at, avatar_url
+                SELECT user_id, email, full_name, created_at, avatar_url, balance
                 FROM public.users
                 ORDER BY full_name
             """)
