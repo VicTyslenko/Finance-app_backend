@@ -68,3 +68,15 @@ class PotMove(BaseModel):
     """Money moved between the balance and a pot."""
 
     amount: Decimal = Field(gt=0, max_digits=12, decimal_places=2)
+
+class RecurringBill(BaseModel):
+    """A recurring bill joined to its counterparty, shaped for the UI."""
+
+    bill_id: int
+    counterparty: str
+    counterparty_slug: str
+    avatar_url: str
+    category: str
+    amount: float  # float, not Decimal - same reason as Transaction.amount
+    due_day: int
+    paid: bool  # a matching payment exists in this month's transactions
