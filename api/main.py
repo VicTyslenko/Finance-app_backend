@@ -18,7 +18,7 @@ app = FastAPI(title="Finance API", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173","https://finance-app-eight-beta-54.vercel.app/"],   
+    allow_origins=["http://localhost:5173","https://finance-app-eight-beta-54.vercel.app"],   
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
