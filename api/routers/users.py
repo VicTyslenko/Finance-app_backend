@@ -27,7 +27,7 @@ async def get_user(user_id: int):
         async with conn.cursor(row_factory=dict_row) as cur:
             await cur.execute(
                 """
-                SELECT user_id, email, full_name, created_at
+                SELECT user_id, email, full_name, created_at, avatar_url, balance
                 FROM public.users
                 WHERE user_id = %s
                 """,
